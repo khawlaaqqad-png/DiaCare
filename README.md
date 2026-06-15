@@ -19,17 +19,15 @@ The system aims to:
 
 ## 🖼️ Screenshots
 
-| Page | Description |
-|------|-------------|
-| ![Login](screenshots/login.png) | Login and account creation interface |
-| ![Dashboard](screenshots/dashboard.png) | Patient list with HbA1c indicator |
-| ![Patient Details](screenshots/patient-details.png) | Patient details and basic information |
-| ![Medical Tests](screenshots/medical-tests.png) | Tests table with status (normal/abnormal) |
-| ![Medications](screenshots/medications.png) | Current medications list and add new medication |
-| ![Add Medication](screenshots/add-medication.png) | Add medication form with compatibility check |
-| ![Smart Suggestions](screenshots/smart-suggestions.png) | Medication suggestions based on similar cases |
-| ![Medical Info](screenshots/medical-info.png) | Diabetes medical information input |
----
+## 🖼️ Screenshots
+
+| Page | Screenshot |
+|------|------------|
+| Login | ![Login](screenshots/login.png) |
+| Dashboard | ![Dashboard](screenshots/dashboard.png) |
+| Patient Details | ![Patient Details](screenshots/patient-details.png) |
+| Medical Tests | ![Medical Tests](screenshots/medical-tests.png) |
+| Medications | ![Medications](screenshots/medications.png) |
 
 ## 🚀 Key Features
 
