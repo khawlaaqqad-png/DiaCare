@@ -21,15 +21,14 @@ The system aims to:
 
 | Page | Description |
 |------|-------------|
-| ![Login]<img width="500" height="400" alt="Screenshot (178)" src="https://github.com/user-attachments/assets/47eb93ee-8ae0-4b5c-948f-38f608391fca" />| Login and account creation interface |
-| ![Dashboard](Screenshot%20(179).png) | Patient list with HbA1c indicator |
-| ![Patient Details](Screenshot%20(180).png) | Patient details and basic information |
-| ![Medical Tests](Screenshot%20(181).png) | Tests table with status (normal/abnormal) |
-| ![Medications](Screenshot%20(182).png) | Current medications list and add new medication |
-| ![Add Medication](Screenshot%20(183).png) | Add medication form with compatibility check |
-| ![Smart Suggestions](Screenshot%20(184).png) | Medication suggestions based on similar cases |
-| ![Medical Info](Screenshot%20(185).png) | Diabetes medical information input |
-
+| ![Login](screenshots/login.png) | Login and account creation interface |
+| ![Dashboard](screenshots/dashboard.png) | Patient list with HbA1c indicator |
+| ![Patient Details](screenshots/patient-details.png) | Patient details and basic information |
+| ![Medical Tests](screenshots/medical-tests.png) | Tests table with status (normal/abnormal) |
+| ![Medications](screenshots/medications.png) | Current medications list and add new medication |
+| ![Add Medication](screenshots/add-medication.png) | Add medication form with compatibility check |
+| ![Smart Suggestions](screenshots/smart-suggestions.png) | Medication suggestions based on similar cases |
+| ![Medical Info](screenshots/medical-info.png) | Diabetes medical information input |
 ---
 
 ## 🚀 Key Features
