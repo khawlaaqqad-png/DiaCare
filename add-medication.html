@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة دواء جديد - عيادة السكري</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #D32F2F;
+            --secondary-color: #FFCDD2;
+            --accent-color: #B71C1C;
+            --text-color: #333;
+            --light-text: #777;
+            --background: #FFF5F5;
+            --card-bg: #FFFFFF;
+            --warning-bg: #FFF3E0;
+            --warning-border: #FFA000;
+            --success-bg: #E8F5E9;
+            --success-border: #4CAF50;
+            --info-bg: #E3F2FD;
+            --info-border: #1976D2;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #FFCDD2;
+        }
+        
+        .clinic-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .clinic-logo {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 20px;
+        }
+        
+        .clinic-text h1 {
+            color: var(--primary-color);
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .medication-form {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-top: 4px solid var(--primary-color);
+            margin-bottom: 30px;
+        }
+        
+        .form-title {
+            color: var(--primary-color);
+            font-size: 22px;
+            margin-bottom: 25px;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .form-title i {
+            margin-left: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--light-text);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary-color);
+            outline: none;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn i {
+            margin-left: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-color);
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-outline:hover {
+            background: var(--secondary-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .alert-box {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            display: none;
+        }
+        
+        .alert-warning {
+            background-color: var(--warning-bg);
+            border-left: 4px solid var(--warning-border);
+        }
+        
+        .alert-success {
+            background-color: var(--success-bg);
+            border-left: 4px solid var(--success-border);
+        }
+        
+        .alert-info {
+            background-color: var(--info-bg);
+            border-left: 4px solid var(--info-border);
+        }
+        
+        .alert-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .alert-title i {
+            margin-left: 8px;
+        }
+        
+        .suggestions-box {
+            position: absolute;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 0 0 6px 6px;
+            width: calc(100% - 24px);
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .suggestion-item:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .med-type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-right: 8px;
+            color: white;
+        }
+        
+        .badge-insulin {
+            background-color: #5C6BC0;
+        }
+        
+        .badge-glp1 {
+            background-color: #7E57C2;
+        }
+        
+        .badge-oral {
+            background-color: #26A69A;
+        }
+        
+        .similar-cases {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #F5F5F5;
+            border-radius: 8px;
+        }
+        
+        .similar-case {
+            padding: 10px;
+            margin: 10px 0;
+            background-color: white;
+            border-radius: 6px;
+            border-left: 4px solid var(--info-border);
+        }
+        
+        .similar-case h4 {
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+        
+        .similar-case p {
+            margin: 5px 0;
+        }
+        
+        .similar-case .patient-name {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .similar-case .medication-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 8px;
+        }
+        
+        .similar-case .med-item {
+            background-color: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> رجوع
+            </button>
+            <div class="clinic-info">
+                <div class="clinic-logo">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="clinic-text">
+                    <h1>عيادة السكري</h1>
+                </div>
+            </div>
+        </header>
+        
+        <div class="medication-form">
+            <h2 class="form-title">
+                <i class="fas fa-pills"></i> إضافة دواء جديد
+            </h2>
+            
+            <form id="addMedicationForm">
+                <div class="form-group">
+                    <label for="medName" class="form-label">اسم الدواء</label>
+                    <input type="text" id="medName" class="form-control" required>
+                    <div id="medSuggestions" class="suggestions-box" style="display:none;"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="dosage" class="form-label">الجرعة</label>
+                    <input type="text" id="dosage" class="form-control" placeholder="مثال: 500 مجم" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="instructions" class="form-label">تعليمات الاستخدام</label>
+                    <textarea id="instructions" class="form-control" placeholder="مثال: يؤخذ بعد الطعام"></textarea>
+                </div>
+                
+                <!-- قسم التحقق من ملائمة الدواء -->
+                <div class="form-group">
+                    <button type="button" class="btn btn-outline" onclick="checkMedication()">
+                        <i class="fas fa-search"></i> التحقق من ملائمة الدواء
+                    </button>
+                </div>
+                
+                <!-- نتائج التحقق -->
+                <div id="medicationAlert" class="alert-box" style="display: none;">
+                    <div class="alert-title">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <span id="alertTitle">تحذير</span>
+                    </div>
+                    <div id="alertContent"></div>
+                </div>
+                
+                <!-- حالات مشابهة -->
+                <div id="similarCases" class="similar-cases" style="display: none;">
+                    <h3><i class="fas fa-users"></i> حالات مرضى مشابهة</h3>
+                    <div id="similarCasesList"></div>
+                </div>
+                
+                <!-- قسم المشابهة للسجلات -->
+                <div class="form-group">
+                    <button type="button" class="btn btn-outline" onclick="getSmartSuggestions()">
+                        <i class="fas fa-magic"></i> اقتراحات ذكية بناءً على مرضى مشابهين
+                    </button>
+                </div>
+                
+                <!-- نتائج الاقتراحات الذكية -->
+                <div id="suggestionsResults" class="alert-box alert-info" style="display: none;">
+                    <div class="alert-title">
+                        <i class="fas fa-lightbulb"></i>
+                        <span>أدوية مقترحة بناءً على مرضى مشابهين</span>
+                    </div>
+                    <div id="suggestionsList"></div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> حفظ الدواء
+                    </button>
+                    <button type="button" class="btn btn-outline" onclick="window.history.back()">
+                        <i class="fas fa-times"></i> إلغاء
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // قاعدة بيانات الأدوية مع تحذيراتها
+        const medicationDatabase = {
+            // أدوية النوع الأول من السكري
+            "Insulin Glargine": {
+                type: "insulin",
+                suitableFor: ["type1", "type2"],
+                warnings: [
+                    { 
+                        condition: "أمراض الكلى", 
+                        warning: "قد يحتاج إلى تعديل الجرعة في حالات القصور الكلوي",
+                        alternatives: ["Insulin Detemir"]
+                    },
+                    { 
+                        condition: "أمراض الكبد", 
+                        warning: "قد يحتاج إلى تعديل الجرعة في حالات القصور الكبدي",
+                        alternatives: []
+                    }
+                ]
+            },
+            "Insulin Aspart": {
+                type: "insulin",
+                suitableFor: ["type1", "type2"],
+                warnings: [
+                    { 
+                        condition: "أمراض الكلى", 
+                        warning: "قد يحتاج إلى تعديل الجرعة في حالات القصور الكلوي",
+                        alternatives: []
+                    }
+                ]
+            },
+            
+            // أدوية النوع الثاني من السكري
+            "Metformin": {
+                type: "oral",
+                suitableFor: ["type2"],
+                warnings: [
+                    { 
+                        condition: "أمراض الكلى", 
+                        warning: "خطر الحماض اللاكتيكي في حالات القصور الشديد (eGFR < 30)",
+                        alternatives: ["Linagliptin", "Empagliflozin"]
+                    },
+                    { 
+                        condition: "أمراض الكبد", 
+                        warning: "خطر الحماض اللاكتيكي في حالات القصور الشديد",
+                        alternatives: ["Sitagliptin"]
+                    }
+                ]
+            },
+            "Gliclazide": {
+                type: "oral",
+                suitableFor: ["type2"],
+                warnings: [
+                    { 
+                        condition: "أمراض الكلى", 
+                        warning: "خطر نقص السكر في الدم بسبب تأخر إخراج الدواء",
+                        alternatives: ["Linagliptin"]
+                    },
+                    { 
+                        condition: "كبار السن", 
+                        warning: "زيادة خطر نقص السكر في الدم",
+                        alternatives: ["Metformin"]
+                    }
+                ]
+            },
+            "Empagliflozin": {
+                type: "oral",
+                suitableFor: ["type2"],
+                warnings: [
+                    { 
+                        condition: "أمراض الكلى", 
+                        warning: "قد تقل الفعالية في حالات القصور الكلوي المتقدم",
+                        alternatives: ["Linagliptin"]
+                    },
+                    { 
+                        condition: "جفاف", 
+                        warning: "خطر الجفاف والتهابات المسالك البولية",
+                        alternatives: []
+                    }
+                ]
+            },
+            
+            // أدوية GLP-1
+            "Liraglutide": {
+                type: "glp1",
+                suitableFor: ["type2"],
+                warnings: [
+                    { 
+                        condition: "أمراض الكلى", 
+                        warning: "قد تحتاج إلى تعديل الجرعة في حالات القصور الكلوي المتقدم",
+                        alternatives: ["Dulaglutide"]
+                    },
+                    { 
+                        condition: "التهاب البنكرياس", 
+                        warning: "يجب تجنبها في حالات التهاب البنكرياس",
+                        alternatives: []
+                    }
+                ]
+            },
+            
+            // أدوية سكري الحمل
+            "Insulin Detemir": {
+                type: "insulin",
+                suitableFor: ["gestational"],
+                warnings: [
+                    { 
+                        condition: "أمراض الكلى", 
+                        warning: "قد يحتاج إلى تعديل الجرعة في حالات القصور الكلوي",
+                        alternatives: []
+                    }
+                ]
+            }
+        };
+
+        // دالة للبحث عن أدوية مطابقة أثناء الكتابة
+        document.getElementById('medName').addEventListener('input', function(e) {
+            const input = e.target.value.toLowerCase();
+            const suggestions = Object.keys(medicationDatabase).filter(med => 
+                med.toLowerCase().includes(input)
+            );
+            
+            showSuggestions(suggestions);
+        });
+
+        // عرض الاقتراحات
+        function showSuggestions(suggestions) {
+            const container = document.getElementById('medSuggestions');
+            container.innerHTML = '';
+            
+            if (suggestions.length === 0 || !document.getElementById('medName').value) {
+                container.style.display = 'none';
+                return;
+            }
+            
+            container.style.display = 'block';
+            suggestions.forEach(med => {
+                const div = document.createElement('div');
+                div.className = 'suggestion-item';
+                
+                const typeBadge = document.createElement('span');
+                typeBadge.className = `med-type-badge badge-${medicationDatabase[med].type === 'insulin' ? 'insulin' : 
+                                      medicationDatabase[med].type === 'glp1' ? 'glp1' : 'oral'}`;
+                
+                if (medicationDatabase[med].type === 'oral') {
+                    typeBadge.textContent = 'فموي';
+                } else if (medicationDatabase[med].type === 'insulin') {
+                    typeBadge.textContent = 'أنسولين';
+                } else if (medicationDatabase[med].type === 'glp1') {
+                    typeBadge.textContent = 'GLP-1';
+                }
+                
+                div.appendChild(typeBadge);
+                div.appendChild(document.createTextNode(med));
+                
+                div.onclick = function() {
+                    document.getElementById('medName').value = med;
+                    container.style.display = 'none';
+                };
+                container.appendChild(div);
+            });
+        }
+
+        // إخفاء قائمة الاقتراحات عند النقر خارجها
+        document.addEventListener('click', function(e) {
+            if (e.target.id !== 'medName') {
+                document.getElementById('medSuggestions').style.display = 'none';
+            }
+        });
+
+        // دالة التحقق من الدواء
+        function checkMedication() {
+            const medName = document.getElementById('medName').value;
+            const patientId = new URLSearchParams(window.location.search).get('patientId');
+            const patients = JSON.parse(localStorage.getItem('diabetesPatients')) || [];
+            const currentPatient = patients.find(p => p.id === patientId) || {};
+            
+            const alertBox = document.getElementById('medicationAlert');
+            const alertTitle = document.getElementById('alertTitle');
+            const alertContent = document.getElementById('alertContent');
+            
+            alertBox.style.display = 'block';
+            
+            // التحقق مما إذا كان الدواء موجوداً في القاعدة
+            if (!medicationDatabase[medName]) {
+                alertBox.className = 'alert-box alert-warning';
+                alertTitle.textContent = 'تنبيه';
+                alertContent.innerHTML = `
+                    <p>الدواء <strong>${medName}</strong> غير مسجل في نظامنا.</p>
+                    <p>يرجى التأكد من اسم الدواء واستشارة الصيدلي إذا لزم الأمر.</p>
+                `;
+                document.getElementById('similarCases').style.display = 'none';
+                return;
+            }
+
+            // التحقق من نوع السكري
+            const diabetesType = currentPatient.diabetesType || '';
+            if (!medicationDatabase[medName].suitableFor.includes(diabetesType)) {
+                alertBox.className = 'alert-box alert-warning';
+                alertTitle.textContent = 'تحذير طبي';
+                alertContent.innerHTML = `
+                    <p>الدواء <strong>${medName}</strong> غير مناسب لمرضى السكري من النوع <strong>${getDiabetesTypeText(diabetesType)}</strong>.</p>
+                    <p>يوصى باستخدام أدوية أخرى مناسبة لنوع السكري هذا.</p>
+                `;
+                findSimilarCases(currentPatient, medName);
+                return;
+            }
+
+            // التحقق من التحذيرات بناءً على حالة المريض
+            let hasConflict = false;
+            let conflictMessage = '';
+            let alternatives = [];
+
+            // جمع جميع الحالات الصحية للمريض
+            const patientConditions = [
+                ...(currentPatient.diseases?.map(d => d.name) || []),
+                ...(currentPatient.complications?.split('،') || [])
+            ].filter(c => c && c.trim() !== '');
+
+            medicationDatabase[medName].warnings.forEach(warning => {
+                if (patientConditions.some(condition => condition.includes(warning.condition))) {
+                    hasConflict = true;
+                    conflictMessage += `
+                        <div style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px dashed #eee;">
+                            <p><strong>${warning.condition}:</strong> ${warning.warning}</p>
+                            ${warning.alternatives.length > 0 ? `
+                            <p style="margin-top: 5px;"><strong>بدائل مقترحة:</strong> ${warning.alternatives.join('، ')}</p>
+                            ` : ''}
+                        </div>
+                    `;
+                    alternatives = [...alternatives, ...warning.alternatives];
+                }
+            });
+
+            if (hasConflict) {
+                alertBox.className = 'alert-box alert-warning';
+                alertTitle.textContent = 'تحذير طبي';
+                alertContent.innerHTML = `
+                    <p>الدواء <strong>${medName}</strong> قد لا يكون مناسباً للمريض بسبب:</p>
+                    ${conflictMessage}
+                `;
+            } else {
+                alertBox.className = 'alert-box alert-success';
+                alertTitle.textContent = 'تحقق ناجح';
+                alertContent.innerHTML = `
+                    <p>الدواء <strong>${medName}</strong> مناسب للمريض بناءً على حالته الصحية.</p>
+                    <p style="margin-top:10px;font-size:0.9em;">
+                        لا توجد تعارضات مع: ${patientConditions.join('، ') || 'لا توجد حالات صحية مسجلة'}
+                    </p>
+                `;
+            }
+
+            // البحث عن حالات مشابهة
+            findSimilarCases(currentPatient, medName);
+        }
+
+        // البحث عن حالات مشابهة
+        function findSimilarCases(currentPatient, medication) {
+            const similarCasesDiv = document.getElementById('similarCases');
+            const similarCasesList = document.getElementById('similarCasesList');
+            
+            // جلب جميع المرضى من localStorage
+            const allPatients = JSON.parse(localStorage.getItem('diabetesPatients')) || [];
+            
+            // تصفية المرضى الذين لديهم خصائص مشابهة ويأخذون نفس الدواء
+            const similarPatients = allPatients.filter(patient => {
+                if (patient.id === currentPatient.id) return false; // استبعاد المريض الحالي
+                
+                // التحقق من وجود نفس نوع السكري
+                const sameDiabetesType = patient.diabetesType === currentPatient.diabetesType;
+                
+                // التحقق من وجود أعمار متقاربة (±10 سنوات)
+                const currentAge = calculateAge(currentPatient.birthDate);
+                const patientAge = calculateAge(patient.birthDate);
+                const ageDiff = Math.abs(currentAge - patientAge) <= 10;
+                
+                // التحقق من وجود أوزان متقاربة (±15 كجم)
+                const currentWeight = parseFloat(currentPatient.weight) || 0;
+                const patientWeight = parseFloat(patient.weight) || 0;
+                const weightDiff = Math.abs(currentWeight - patientWeight) <= 15;
+                
+                // التحقق من وجود أمراض مشابهة
+                const patientDiseases = patient.diseases?.map(d => d.name) || [];
+                const currentDiseases = currentPatient.diseases?.map(d => d.name) || [];
+                const similarDiseases = patientDiseases.some(d => currentDiseases.includes(d));
+                
+                // التحقق من أن المريض يأخذ الدواء المحدد
+                const takesSameMedication = patient.medications && 
+                    patient.medications.some(med => med.name === medication);
+                
+                return sameDiabetesType && (ageDiff || weightDiff || similarDiseases) && takesSameMedication;
+            });
+            
+            if (similarPatients.length > 0) {
+                similarCasesDiv.style.display = 'block';
+                similarCasesList.innerHTML = '';
+                
+                similarPatients.forEach(patient => {
+                    const caseDiv = document.createElement('div');
+                    caseDiv.className = 'similar-case';
+                    
+                    // جمع الأدوية التي يأخذها المريض
+                    const medicationsHTML = patient.medications
+                        .filter(med => med.name === medication)
+                        .map(med => `
+                            <div class="med-item">
+                                <strong>${med.name}</strong>: ${med.dose || '--'}
+                            </div>
+                        `).join('');
+                    
+                    caseDiv.innerHTML = `
+                        <h4><span class="patient-name">${patient.fullName}</span> (${patient.gender === 'male' ? 'ذكر' : 'أنثى'}, ${calculateAge(patient.birthDate)} سنة)</h4>
+                        <p><strong>الوزن:</strong> ${patient.weight || '--'} كجم</p>
+                        <p><strong>نوع السكري:</strong> ${getDiabetesTypeText(patient.diabetesType)}</p>
+                        <p><strong>الأمراض:</strong> ${patient.diseases?.map(d => d.name).join('، ') || '--'}</p>
+                        <div class="medication-info">
+                            ${medicationsHTML}
+                        </div>
+                    `;
+                    similarCasesList.appendChild(caseDiv);
+                });
+            } else {
+                similarCasesDiv.style.display = 'none';
+            }
+        }
+
+        // دالة للحصول على الاقتراحات الذكية
+        function getSmartSuggestions() {
+            const patientId = new URLSearchParams(window.location.search).get('patientId');
+            const patients = JSON.parse(localStorage.getItem('diabetesPatients')) || [];
+            const currentPatient = patients.find(p => p.id === patientId);
+            
+            if (!currentPatient) {
+                showAlert('info', 'لا توجد بيانات كافية للمريض الحالي لإنشاء اقتراحات');
+                return;
+            }
+            
+            // تصفية المرضى المشابهين (نفس نوع السكري، عمر ووزن متقارب، أمراض مشابهة)
+            const similarPatients = patients.filter(patient => {
+                if (patient.id === patientId) return false;
+                
+                // نفس نوع السكري
+                if (patient.diabetesType !== currentPatient.diabetesType) return false;
+                
+                // فرق العمر ±10 سنوات
+                const currentAge = calculateAge(currentPatient.birthDate);
+                const patientAge = calculateAge(patient.birthDate);
+                if (Math.abs(currentAge - patientAge) > 10) return false;
+                
+                // فرق الوزن ±15 كجم
+                const currentWeight = parseFloat(currentPatient.weight) || 0;
+                const patientWeight = parseFloat(patient.weight) || 0;
+                if (Math.abs(currentWeight - patientWeight) > 15) return false;
+                
+                // أمراض مشابهة
+                const patientDiseases = patient.diseases?.map(d => d.name) || [];
+                const currentDiseases = currentPatient.diseases?.map(d => d.name) || [];
+                const similarDiseases = patientDiseases.some(d => currentDiseases.includes(d));
+                
+                return similarDiseases;
+            });
+           // ستخراج الأدوية الأكثر شيوعاً بين المرضى المشابهين
+            const medicationMap = {};
+            
+            similarPatients.forEach(patient => {
+                if (patient.medications && patient.medications.length > 0) {
+                    patient.medications.forEach(med => {
+                        if (!medicationMap[med.name]) {
+                            medicationMap[med.name] = {
+                                name: med.name,
+                                count: 0,
+                                patients: []
+                            };
+                        }
+                        medicationMap[med.name].count++;
+                        medicationMap[med.name].patients.push(patient.fullName);
+                    });
+                }
+            });
+            
+            
+            // تحويل إلى مصفوفة وترتيب حسب الأكثر شيوعاً
+            const suggestions = Object.values(medicationMap)
+                .sort((a, b) => b.count - a.count)
+                .slice(0, 3); // أعلى 3 أدوية فقط
+            
+            // عرض الاقتراحات
+            displaySuggestions(suggestions, similarPatients.length);
+        }
+        
+        // عرض الاقتراحات
+        function displaySuggestions(suggestions, similarPatientsCount) {
+            const suggestionsList = document.getElementById('suggestionsList');
+            const suggestionsResults = document.getElementById('suggestionsResults');
+            
+            if (suggestions.length === 0) {
+                suggestionsList.innerHTML = '<p>لا توجد اقتراحات متاحة بناءً على البيانات الحالية</p>';
+                suggestionsResults.style.display = 'block';
+                return;
+            }
+            
+            let html = `<p>تم تحليل ${similarPatientsCount} حالة مشابهة:</p>`;
+            
+            suggestions.forEach(suggestion => {
+                const medInfo = medicationDatabase[suggestion.name] || {};
+                const typeBadge = medInfo.type === 'insulin' ? 'أنسولين' : 
+                                 medInfo.type === 'glp1' ? 'GLP-1' : 'فموي';
+                
+                html += `
+                    <div style="margin: 15px 0; padding: 10px; background: white; border-radius: 6px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                            <strong>${suggestion.name}</strong>
+                            <span style="background: #E3F2FD; padding: 2px 8px; border-radius: 4px; font-size: 0.9em;">${typeBadge}</span>
+                        </div>
+                        <p style="font-size: 0.9em; margin: 5px 0;">مستخدم من قبل ${suggestion.count} مريض مشابه</p>
+                        <button onclick="applySuggestion('${suggestion.name}')" style="background: var(--primary-color); color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.9em;">
+                            تطبيق هذا الاقتراح
+                        </button>
+                    </div>
+                `;
+            });
+            
+            suggestionsList.innerHTML = html;
+            suggestionsResults.style.display = 'block';
+        }
+        
+        // تطبيق الاقتراح على النموذج
+        function applySuggestion(medName) {
+            document.getElementById('medName').value = medName;
+            
+            // تعيين جرعة افتراضية بناءً على نوع الدواء
+            const medInfo = medicationDatabase[medName];
+            if (medInfo) {
+                let defaultDose = '';
+                if (medInfo.type === 'insulin') {
+                    defaultDose = '10 وحدات يومياً';
+                } else if (medInfo.type === 'glp1') {
+                    defaultDose = '0.6 مجم أسبوعياً';
+                } else {
+                    defaultDose = '500 مجم مرتين يومياً';
+                }
+                document.getElementById('dosage').value = defaultDose;
+            }
+            
+            showAlert('success', `تم تطبيق الدواء المقترح: ${medName}`);
+        }
+        
+        // دالة لعرض التنبيهات
+        function showAlert(type, message) {
+            const alertBox = document.getElementById('medicationAlert');
+            alertBox.style.display = 'block';
+            alertBox.className = `alert-box alert-${type}`;
+            
+            document.getElementById('alertTitle').textContent = 
+                type === 'success' ? 'نجاح' : 
+                type === 'warning' ? 'تحذير' : 'معلومة';
+                
+            document.getElementById('alertContent').innerHTML = `<p>${message}</p>`;
+        }
+        
+        // حساب العمر من تاريخ الميلاد
+        function calculateAge(birthDate) {
+            if (!birthDate) return '--';
+            
+            const today = new Date();
+            const birthDateObj = new Date(birthDate);
+            
+            if (isNaN(birthDateObj.getTime())) return '--';
+            
+            let age = today.getFullYear() - birthDateObj.getFullYear();
+            const monthDiff = today.getMonth() - birthDateObj.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+                age--;
+            }
+            
+            return age;
+        }
+        
+        // تحويل نوع السكري إلى نص مفهوم
+        function getDiabetesTypeText(type) {
+            switch(type) {
+                case 'type1': return 'النوع الأول';
+                case 'type2': return 'النوع الثاني';
+                case 'gestational': return 'سكري الحمل';
+                case 'other': return 'أخرى';
+                default: return '--';
+            }
+        }
+
+        // حفظ الدواء في سجل المريض
+        document.getElementById('addMedicationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // جمع بيانات النموذج
+            const medication = {
+                id: 'med_' + Date.now(),
+                name: document.getElementById('medName').value,
+                dosage: document.getElementById('dosage').value,
+                instructions: document.getElementById('instructions').value,
+                addedDate: new Date().toLocaleDateString('ar-SA')
+            };
+            
+            // الحصول على بيانات المريض الحالية من localStorage
+            const patientId = new URLSearchParams(window.location.search).get('patientId');
+            let patients = JSON.parse(localStorage.getItem('diabetesPatients')) || [];
+            const patientIndex = patients.findIndex(p => p.id === patientId);
+            
+            if (patientIndex !== -1) {
+                if (!patients[patientIndex].medications) {
+                    patients[patientIndex].medications = [];
+                }
+                
+                // إضافة الدواء الجديد إلى قائمة الأدوية
+                patients[patientIndex].medications.push({
+                    name: medication.name,
+                    dose: medication.dosage,
+                    instructions: medication.instructions,
+                    addedDate: medication.addedDate
+                });
+                
+                // حفظ البيانات المحدثة
+                localStorage.setItem('diabetesPatients', JSON.stringify(patients));
+                
+                // عرض رسالة نجاح
+                alert('تم إضافة الدواء بنجاح');
+                
+                // العودة إلى صفحة المريض
+                window.location.href = `patient-details.html?id=${patientId}`;
+            } else {
+                alert('لم يتم العثور على بيانات المريض');
+            }
+        });
+
+        // تعيين تاريخ اليوم كتاريخ بدء افتراضي
+        document.addEventListener('DOMContentLoaded', function() {
+            // يمكنك إضافة أي تهيئة إضافية هنا إذا لزم الأمر
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إضافة مريض سكري - السجل الطبي</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1976D2;
+            --secondary-color: #E3F2FD;
+            --accent-color: #0D47A1;
+            --diabetes-color: #D32F2F;
+            --text-color: #333;
+            --light-text: #777;
+            --background: #F5F9FF;
+            --card-bg: #FFFFFF;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background-color: var(--diabetes-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 20px;
+        }
+        
+        .logo-text h1 {
+            color: var(--diabetes-color);
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        
+        .logo-text p {
+            color: var(--light-text);
+            font-size: 14px;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn i {
+            margin-right: 5px;
+        }
+        
+        .form-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .form-title {
+            color: var(--diabetes-color);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--secondary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-title i {
+            margin-left: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .form-group textarea {
+            min-height: 80px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        
+        .section-divider {
+            border-top: 2px dashed var(--secondary-color);
+            margin: 30px 0;
+            padding-top: 20px;
+        }
+        
+        .diabetes-specific {
+            background-color: #FFEBEE;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--diabetes-color);
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: flex-start;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            border: none;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: var(--diabetes-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #B71C1C;
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .medications-list {
+            margin-top: 15px;
+        }
+        
+        .medication-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .medication-item input {
+            flex: 1;
+        }
+        
+        .remove-med {
+            color: var(--diabetes-color);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .add-med-btn {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .add-med-btn i {
+            margin-left: 5px;
+        }
+        
+        .tests-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .test-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .test-item label {
+            margin-bottom: 5px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .test-item input {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+        }
+        
+        .test-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .test-row input {
+            flex: 1;
+        }
+        
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .tests-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .test-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> رجوع
+            </button>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>عيادة السكري</h1>
+                </div>
+            </div>
+        </header>
+        
+        <div class="form-container">
+            <h2 class="form-title">
+                <i class="fas fa-user-plus"></i> تسجيل مريض سكري جديد
+            </h2>
+            
+            <form id="diabetesPatientForm">
+                <!-- المعلومات الأساسية -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fullName">الاسم الكامل</label>
+                        <input type="text" id="fullName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">الجنس</label>
+                        <select id="gender" required>
+                            <option value="">اختر الجنس</option>
+                            <option value="male">ذكر</option>
+                            <option value="female">أنثى</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="birthDate">تاريخ الميلاد</label>
+                        <input type="date" id="birthDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="bloodType">زمرة الدم</label>
+                        <select id="bloodType">
+                            <option value="">اختر زمرة الدم</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">رقم الهاتف</label>
+                        <input type="tel" id="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="emergencyPhone">هاتف الطوارئ</label>
+                        <input type="tel" id="emergencyPhone">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="weight">الوزن (كجم)</label>
+                    <input type="number" id="weight" placeholder="أدخل الوزن بالكيلوجرام">
+                </div>
+                
+                <!-- قسم السكري -->
+                <div class="section-divider"></div>
+                
+                <div class="diabetes-specific">
+                    <h3 class="form-title">
+                        <i class="fas fa-file-medical"></i> المعلومات الطبية للسكري
+                    </h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="diabetesType">نوع السكري</label>
+                            <select id="diabetesType" required>
+                                <option value="">اختر النوع</option>
+                                <option value="type1">النوع الأول</option>
+                                <option value="type2">النوع الثاني</option>
+                                <option value="gestational">سكري الحمل</option>
+                                <option value="other">أخرى</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="firstDiagnosisDate">تاريخ أول تشخيص</label>
+                            <input type="date" id="firstDiagnosisDate">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastDiagnosisDate">تاريخ آخر تشخيص</label>
+                            <input type="date" id="lastDiagnosisDate">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="hba1c">آخر تحليل HbA1c (%)</label>
+                            <input type="number" step="0.1" id="hba1c" placeholder="مثال: 6.5">
+                        </div>
+                        <div class="form-group">
+                            <label for="rbs">تحليل السكري العشوائي (RBS)</label>
+                            <input type="number" id="rbs" placeholder="مثال: 150">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="complications">المضاعفات الموجودة (إن وجدت)</label>
+                        <textarea id="complications" placeholder="مثال: اعتلال شبكية، اعتلال أعصاب..."></textarea>
+                    </div>
+                    
+                    <!-- الفحوصات الطبية -->
+                    <h4 class="form-title" style="font-size: 18px; margin-top: 25px;">
+                        <i class="fas fa-flask"></i> الفحوصات الطبية
+                    </h4>
+                    
+                    <div class="tests-grid">
+                        <div class="test-item">
+                            <label for="fbs">فحص السكري الصائم (FBS)</label>
+                            <div class="test-row">
+                                <input type="number" id="fbs" placeholder="نتيجة المريض">
+                                <input type="text" value="70-105 mg/dl" readonly>
+                            </div>
+                        </div>
+                        <div class="test-item">
+                            <label for="wbc">خلايا الدم البيضاء (W.B.C)</label>
+                            <div class="test-row">
+                                <input type="number" id="wbc" placeholder="نتيجة المريض">
+                                <input type="text" value="4-10" readonly>
+                            </div>
+                        </div>
+                        <div class="test-item">
+                            <label for="rbc">خلايا الدم الحمراء (R.B.C)</label>
+                            <div class="test-row">
+                                <input type="number" step="0.1" id="rbc" placeholder="نتيجة المريض">
+                                <input type="text" value="4.5-5.5" readonly>
+                            </div>
+                        </div>
+                        <div class="test-item">
+                            <label for="hgb">الهيموغلوبين (H.G.B)</label>
+                            <div class="test-row">
+                                <input type="number" step="0.1" id="hgb" placeholder="نتيجة المريض">
+                                <input type="text" value="13-17 g/dl" readonly>
+                            </div>
+                        </div>
+                        <div class="test-item">
+                            <label for="ldl">الكوليسترول الضار (LDL)</label>
+                            <div class="test-row">
+                                <input type="number" id="ldl" placeholder="نتيجة المريض">
+                                <input type="text" value="<130 mg/dl" readonly>
+                            </div>
+                        </div>
+                        <div class="test-item">
+                            <label for="hdl">الكوليسترول الجيد (HDL)</label>
+                            <div class="test-row">
+                                <input type="number" id="hdl" placeholder="نتيجة المريض">
+                                <input type="text" value=">60 mg/dl" readonly>
+                            </div>
+                        </div>
+                        <div class="test-item">
+                            <label for="tg">الدهون الثلاثية (TG)</label>
+                            <div class="test-row">
+                                <input type="number" id="tg" placeholder="نتيجة المريض">
+                                <input type="text" value="40-150 mg/dl" readonly>
+                            </div>
+                        </div>
+                        <div class="test-item">
+                            <label for="bp">ضغط الدم (B.P)</label>
+                            <div class="test-row">
+                                <input type="text" id="bp" placeholder="مثال: 120/80">
+                                <input type="text" value="120/80 mm/Hg" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- الأدوية -->
+                <div class="section-divider"></div>
+                
+                <div class="form-group">
+                    <label>الأدوية الحالية</label>
+                    <div class="medications-list" id="medicationsList">
+                        <!-- سيتم إضافة الأدوية هنا ديناميكياً -->
+                        <div class="medication-item">
+                            <input type="text" placeholder="اسم الدواء" class="med-name">
+                            <input type="text" placeholder="الجرعة" class="med-dose">
+                            <button type="button" class="remove-med" onclick="removeMedication(this)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-med-btn" onclick="addMedicationField()">
+                        <i class="fas fa-plus"></i> إضافة دواء جديد
+                    </button>
+                </div>
+                
+                <!-- الأمراض الحالية -->
+                <div class="form-group">
+                    <label>الأمراض الحالية</label>
+                    <div class="medications-list" id="diseasesList">
+                        <!-- سيتم إضافة الأمراض هنا ديناميكياً -->
+                        <div class="medication-item">
+                            <input type="text" placeholder="اسم المرض" class="disease-name">
+                            <input type="text" placeholder="تاريخ التشخيص" class="disease-date">
+                            <button type="button" class="remove-med" onclick="removeDisease(this)">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <button type="button" class="add-med-btn" onclick="addDiseaseField()">
+                        <i class="fas fa-plus"></i> إضافة مرض جديد
+                    </button>
+                </div>
+                
+                <!-- العمليات السابقة -->
+                <div class="section-divider"></div>
+                
+                <div class="form-group">
+                    <label for="previousSurgeries">العمليات الجراحية السابقة</label>
+                    <textarea id="previousSurgeries" placeholder="اذكر أي عمليات جراحية مع التاريخ إن أمكن"></textarea>
+                </div>
+                
+                <!-- التاريخ المرضي -->
+                <div class="section-divider"></div>
+                
+                <div class="form-group">
+                    <label for="medicalHistory">التاريخ المرضي والعائلي</label>
+                    <textarea id="medicalHistory" placeholder="أي أمراض أخرى أو تاريخ عائلي للسكري"></textarea>
+                </div>
+                
+                <!-- الملاحظات -->
+                <div class="form-group">
+                    <label for="notes">ملاحظات إضافية</label>
+                    <textarea id="notes"></textarea>
+                </div>
+                
+                <div class="action-buttons">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> حفظ السجل
+                    </button>
+                    <button type="reset" class="btn btn-outline">
+                        <i class="fas fa-undo"></i> إعادة تعيين
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <script>
+        // إضافة حقول أدوية جديدة
+        function addMedicationField() {
+            const medList = document.getElementById('medicationsList');
+            const newMed = document.createElement('div');
+            newMed.className = 'medication-item';
+            newMed.innerHTML = `
+                <input type="text" placeholder="اسم الدواء" class="med-name">
+                <input type="text" placeholder="الجرعة" class="med-dose">
+                <button type="button" class="remove-med" onclick="removeMedication(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            medList.appendChild(newMed);
+        }
+        
+        // حذف حقول الأدوية
+        function removeMedication(button) {
+            const medList = document.getElementById('medicationsList');
+            if (medList.children.length > 1) {
+                button.closest('.medication-item').remove();
+            } else {
+                alert("يجب أن يكون هناك دواء واحد على الأقل");
+            }
+        }
+        
+        // إضافة حقول أمراض جديدة
+        function addDiseaseField() {
+            const diseasesList = document.getElementById('diseasesList');
+            const newDisease = document.createElement('div');
+            newDisease.className = 'medication-item';
+            newDisease.innerHTML = `
+                <input type="text" placeholder="اسم المرض" class="disease-name">
+                <input type="text" placeholder="تاريخ التشخيص" class="disease-date">
+                <button type="button" class="remove-med" onclick="removeDisease(this)">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+            diseasesList.appendChild(newDisease);
+        }
+        
+        // حذف حقول الأمراض
+        function removeDisease(button) {
+            const diseasesList = document.getElementById('diseasesList');
+            if (diseasesList.children.length > 1) {
+                button.closest('.medication-item').remove();
+            } else {
+                alert("يجب أن يكون هناك مرض واحد على الأقل");
+            }
+        }
+        
+        // حفظ النموذج
+        document.getElementById('diabetesPatientForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // جمع بيانات المريض
+            const patientData = {
+                id: 'patient_' + Date.now(),
+                fullName: document.getElementById('fullName').value,
+                gender: document.getElementById('gender').value,
+                birthDate: document.getElementById('birthDate').value,
+                bloodType: document.getElementById('bloodType').value,
+                phone: document.getElementById('phone').value,
+                emergencyPhone: document.getElementById('emergencyPhone').value,
+                weight: document.getElementById('weight').value,
+                diabetesType: document.getElementById('diabetesType').value,
+                firstDiagnosisDate: document.getElementById('firstDiagnosisDate').value,
+                lastDiagnosisDate: document.getElementById('lastDiagnosisDate').value,
+                hba1c: document.getElementById('hba1c').value,
+                rbs: document.getElementById('rbs').value,
+                complications: document.getElementById('complications').value,
+                fbs: document.getElementById('fbs').value,
+                wbc: document.getElementById('wbc').value,
+                rbc: document.getElementById('rbc').value,
+                hgb: document.getElementById('hgb').value,
+                ldl: document.getElementById('ldl').value,
+                hdl: document.getElementById('hdl').value,
+                tg: document.getElementById('tg').value,
+                bp: document.getElementById('bp').value,
+                previousSurgeries: document.getElementById('previousSurgeries').value,
+                medicalHistory: document.getElementById('medicalHistory').value,
+                notes: document.getElementById('notes').value,
+                medications: [],
+                diseases: [],
+                lastVisit: new Date().toLocaleDateString('ar-SA')
+            };
+            
+            // جمع الأدوية
+            const medItems = document.querySelectorAll('#medicationsList .medication-item');
+            medItems.forEach(item => {
+                const name = item.querySelector('.med-name').value;
+                const dose = item.querySelector('.med-dose').value;
+                if (name) {
+                    patientData.medications.push({
+                        name,
+                        dose
+                    });
+                }
+            });
+            
+            // جمع الأمراض
+            const diseaseItems = document.querySelectorAll('#diseasesList .medication-item');
+            diseaseItems.forEach(item => {
+                const name = item.querySelector('.disease-name').value;
+                const date = item.querySelector('.disease-date').value;
+                if (name) {
+                    patientData.diseases.push({
+                        name,
+                        date
+                    });
+                }
+            });
+            
+            // الحصول على المرضى الحاليين من localStorage
+            let patients = JSON.parse(localStorage.getItem('diabetesPatients')) || [];
+            
+            // إضافة المريض الجديد
+            patients.push(patientData);
+            
+            // حفظ البيانات في localStorage
+            localStorage.setItem('diabetesPatients', JSON.stringify(patients));
+            
+            // عرض رسالة نجاح
+            alert('تم حفظ بيانات المريض بنجاح!');
+            
+            // الانتقال إلى الصفحة الرئيسية
+            window.location.href = 'dashboard.html';
+        });
+// كود لتحميل بيانات المرضى الافتراضية إذا لم تكن موجودة
+function loadSamplePatients() {
+    const samplePatients = [
+        {
+                "id": "patient_1",
+                "fullName": "أحمد محمد علي",
+                "gender": "male",
+                "birthDate": "1995-03-15",
+                "bloodType": "A+",
+                "phone": "0595123456",
+                "emergencyPhone": "0595123457",
+                "weight": "70",
+                "diabetesType": "type1",
+                "firstDiagnosisDate": "2010-05-20",
+                "lastDiagnosisDate": "2023-05-20",
+                "hba1c": "7.8",
+                "rbs": "210",
+                "complications": "لا يوجد",
+                "fbs": "180",
+                "wbc": "6.2",
+                "rbc": "4.8",
+                "hgb": "14",
+                "ldl": "110",
+                "hdl": "45",
+                "tg": "150",
+                "bp": "130/85",
+                "previousSurgeries": "لا يوجد",
+                "medicalHistory": "لا يوجد تاريخ مرضي عائلي",
+                "notes": "يحتاج لمراقبة مستمرة للسكر",
+                "medications": [
+                    {"name": "Insulin Glargine", "dose": "20 وحدة ليلاً"},
+                    {"name": "Insulin Aspart", "dose": "8 وحدات قبل الوجبات"}
+                ],
+                "diseases": [],
+                "lastVisit": "2023-11-15"
+            },
+            {
+                "id": "patient_2",
+                "fullName": "سارة خالد عبدالله",
+                "gender": "female",
+                "birthDate": "1980-08-22",
+                "bloodType": "B-",
+                "phone": "0595234567",
+                "emergencyPhone": "0595234568",
+                "weight": "85",
+                "diabetesType": "type2",
+                "firstDiagnosisDate": "2015-11-10",
+                "lastDiagnosisDate": "2023-10-05",
+                "hba1c": "8.2",
+                "rbs": "190",
+                "complications": "لا يوجد",
+                "fbs": "150",
+                "wbc": "7.8",
+                "rbc": "4.5",
+                "hgb": "12.5",
+                "ldl": "140",
+                "hdl": "40",
+                "tg": "180",
+                "bp": "140/90",
+                "previousSurgeries": "لا يوجد",
+                "medicalHistory": "ارتفاع ضغط الدم في العائلة",
+                "notes": "تعاني من زيادة الوزن، تحتاج لنظام غذائي",
+                "medications": [
+                    {"name": "Metformin", "dose": "1000 مجم مرتين يومياً"},
+                    {"name": "Gliclazide", "dose": "80 مجم صباحاً"}
+                ],
+                "diseases": [
+                    {"name": "ارتفاع ضغط الدم", "date": "2017-03-15"}
+                ],
+                "lastVisit": "2023-11-10"
+            },
+            {
+                "id": "patient_4",
+                "fullName": "علي حسن محمود",
+                "gender": "male",
+                "birthDate": "1975-11-30",
+                "bloodType": "O+",
+                "phone": "0598235671",
+                "emergencyPhone": "0598235672",
+                "weight": "92",
+                "diabetesType": "type2",
+                "firstDiagnosisDate": "2008-07-15",
+                "hba1c": "9.1",
+                "fbs": "210",
+                "rbs": "250",
+                "wbc": "5.8",
+                "hgb": "10.5",
+                "ldl": "160",
+                "complications": "اعتلال شبكية السكري، اعتلال الأعصاب الطرفية",
+                "medications": [
+                    {"name": "Empagliflozin", "dose": "25 مجم يومياً"},
+                    {"name": "Gliclazide", "dose": "60 مجم صباحاً"}
+                ],
+                "diseases": [
+                    {"name": "ارتفاع ضغط الدم"},
+                    {"name": "ارتفاع الدهون"}
+                ]
+            },
+            {
+                "id": "patient_5",
+                "fullName": "عبدالرحمن إبراهيم سالم",
+                "gender": "male",
+                "birthDate": "1950-06-10",
+                "bloodType": "A-",
+                "phone": "0598235673",
+                "emergencyPhone": "0598235674",
+                "weight": "68",
+                "diabetesType": "type2",
+                "firstDiagnosisDate": "2005-09-22",
+                "hba1c": "7.5",
+                "fbs": "140",
+                "rbs": "180",
+                "wbc": "4.5",
+                "hgb": "13",
+                "ldl": "120",
+                "medications": [
+                    {"name": "Metformin", "dose": "850 مجم مرتين يومياً"},
+                    {"name": "Linagliptin", "dose": "5 مجم يومياً"}
+                ],
+                "diseases": [
+                    {"name": "أمراض الكلى"},
+                    {"name": "هشاشة العظام"}
+                ],
+                "notes": "يحتاج لتعديل جرعات الأدوية حسب وظائف الكلى"
+            },
+            {
+                "id": "patient_6",
+                "fullName": "فاطمة ناصر محمد",
+                "gender": "female",
+                "birthDate": "1988-02-14",
+                "bloodType": "B+",
+                "phone": "0598235675",
+                "emergencyPhone": "0598235676",
+                "weight": "110",
+                "diabetesType": "type2",
+                "firstDiagnosisDate": "2018-04-05",
+                "hba1c": "8.9",
+                "fbs": "170",
+                "rbs": "220",
+                "wbc": "9.2",
+                "hgb": "14.5",
+                "ldl": "150",
+                "medications": [
+                    {"name": "Liraglutide", "dose": "1.2 مجم يومياً"},
+                    {"name": "Metformin", "dose": "1000 مجم مرتين يومياً"}
+                ],
+                "diseases": [
+                    {"name": "انقطاع النفس النومي"},
+                    {"name": "ارتفاع ضغط الدم"}
+                ],
+                "notes": "تحتاج لبرنامج تخفيف وزن مكثف"
+            },
+            {
+                "id": "patient_7",
+                "fullName": "يوسف خالد راشد",
+                "gender": "male",
+                "birthDate": "1990-09-25",
+                "bloodType": "O-",
+                "phone": "0598235677",
+                "emergencyPhone": "0598235678",
+                "weight": "76",
+                "diabetesType": "type2",
+                "firstDiagnosisDate": "2023-10-15",
+                "hba1c": "7.2",
+                "fbs": "125",
+                "rbs": "160",
+                "wbc": "6.8",
+                "hgb": "15",
+                "ldl": "130",
+                "medications": [
+                    {"name": "Metformin", "dose": "500 مجم مرتين يومياً"}
+                ],
+                "notes": "يحتاج لتعديل نمط الحياة قبل زيادة الأدوية"
+            },
+            {
+                "id": "patient_8",
+                "fullName": "محمد عبدالله سعيد",
+                "gender": "male",
+                "birthDate": "1965-07-12",
+                "bloodType": "AB-",
+                "phone": "0598235679",
+                "emergencyPhone": "0598235680",
+                "weight": "82",
+                "diabetesType": "type2",
+                "firstDiagnosisDate": "2012-03-18",
+                "hba1c": "7.0",
+                "fbs": "130",
+                "rbs": "170",
+                "wbc": "5.5",
+                "hgb": "13.5",
+                "ldl": "100",
+                "medications": [
+                    {"name": "Metformin", "dose": "850 مجم مرتين يومياً"},
+                    {"name": "Empagliflozin", "dose": "10 مجم يومياً"},
+                    {"name": "Gliclazide", "dose": "30 مجم صباحاً"}
+                ],
+                "diseases": [
+                    {"name": "مرض الشريان التاجي"},
+                    {"name": "ارتفاع ضغط الدم"}
+                ],
+                "notes": "يحتاج لمتابعة قلبية دورية"
+            },
+            {
+                "id": "patient_9",
+                "fullName": "نوره عبدالرحمن علي",
+                "gender": "female",
+                "birthDate": "1972-12-08",
+                "bloodType": "A+",
+                "phone": "0598235681",
+                "emergencyPhone": "0598235682",
+                "weight": "65",
+                "diabetesType": "type2",
+                "firstDiagnosisDate": "2007-06-30",
+                "hba1c": "8.5",
+                "fbs": "160",
+                "rbs": "200",
+                "wbc": "4.8",
+                "hgb": "10",
+                "ldl": "120",
+                "creatinine": "2.1",
+                "medications": [
+                    {"name": "Insulin Glargine", "dose": "15 وحدة ليلاً"},
+                    {"name": "Linagliptin", "dose": "5 مجم يومياً"}
+                ],
+                "diseases": [
+                    {"name": "أمراض الكلى"}
+                ],
+                "notes": "تجنب الأدوية المخرجة عبر الكلى"
+            },
+            {
+                "id": "patient_10",
+                "fullName": "خالد سعد عبدالعزيز",
+                "gender": "male",
+                "birthDate": "1985-05-20",
+                "bloodType": "B+",
+                "phone": "0598235683",
+                "emergencyPhone": "0598235684",
+                "weight": "72",
+                "diabetesType": "other",
+                "firstDiagnosisDate": "2019-02-14",
+                "fbs": "90",
+                "rbs": "100",
+                "wbc": "7.0",
+                "hgb": "14",
+                "medications": [
+                    {"name": "Insulin Detemir", "dose": "10 وحدات يومياً"}
+                ],
+                "notes": "حالة نادرة، يحتاج لمتابعة دقيقة"
+            }
+        ];
+    const existingPatients = JSON.parse(localStorage.getItem('diabetesPatients')) || [];
+        
+        // إضافة المرضى الجدد فقط إذا لم يكونوا موجودين
+        samplePatients.forEach(patient => {
+            if (!existingPatients.some(p => p.id === patient.id)) {
+                existingPatients.push(patient);
+            }
+        });
+
+        localStorage.setItem('diabetesPatients', JSON.stringify(existingPatients));
+        return existingPatients;
+    }
+
+    // استدعاء الدالة عند تحميل الصفحة
+    document.addEventListener('DOMContentLoaded', function() {
+        loadSamplePatients();
+    });
+</script
+    </script>
+</body>
+</html>

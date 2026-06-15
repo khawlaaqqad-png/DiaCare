@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفاصيل المريض - عيادة السكري</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #D32F2F;
+            --secondary-color: #FFCDD2;
+            --accent-color: #B71C1C;
+            --text-color: #333;
+            --light-text: #777;
+            --background: #FFF5F5;
+            --card-bg: #FFFFFF;
+            --edit-bg: #FFF9C4;
+            --normal-range: #4CAF50;
+            --abnormal-range: #F44336;
+            --table-header: #F5F5F5;
+            --table-border: #E0E0E0;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text-color);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #FFCDD2;
+            margin-bottom: 20px;
+        }
+        
+        .clinic-info {
+            display: flex;
+            align-items: center;
+        }
+        
+        .clinic-logo {
+            width: 50px;
+            height: 50px;
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 15px;
+            font-size: 20px;
+        }
+        
+        .clinic-text h1 {
+            color: var(--primary-color);
+            font-size: 22px;
+            margin-bottom: 5px;
+        }
+        
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-btn i {
+            margin-right: 5px;
+        }
+        
+        .patient-profile {
+            display: flex;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        
+        .patient-avatar {
+            width: 150px;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .patient-avatar i {
+            font-size: 60px;
+            color: var(--primary-color);
+        }
+        
+        .patient-info {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .patient-name {
+            font-size: 24px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .patient-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .meta-item i {
+            margin-left: 8px;
+            color: var(--light-text);
+        }
+        
+        .patient-hba1c {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: 500;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .tab-btn {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            position: relative;
+        }
+        
+        .tab-btn.active {
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .info-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-card h3 i {
+            margin-left: 10px;
+        }
+        
+        .info-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: var(--light-text);
+            min-width: 150px;
+        }
+        
+        .info-value {
+            color: var(--text-color);
+            flex: 1;
+        }
+        
+        .editable {
+            background-color: var(--edit-bg);
+            padding: 5px;
+            border: 1px dashed #FFA000;
+            border-radius: 4px;
+            cursor: text;
+            width: 100%;
+        }
+        
+        .editable-input {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        
+        .editable-select {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: inherit;
+        }
+        
+        .editable-textarea {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: inherit;
+            min-height: 80px;
+            resize: vertical;
+        }
+        
+        .medications-list {
+            margin-top: 15px;
+        }
+        
+        .medication-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .medication-item:last-child {
+            border-bottom: none;
+        }
+        
+        .medication-name {
+            flex: 1;
+            font-weight: 500;
+        }
+        
+        .medication-details {
+            flex: 2;
+            color: var(--light-text);
+        }
+        
+        .add-med-btn {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .add-med-btn i {
+            margin-left: 5px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-color);
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .btn-save {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #388E3C;
+        }
+        
+        /* جدول الفحوصات الطبية */
+        .tests-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        .tests-table th, .tests-table td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--table-border);
+        }
+        
+        .tests-table th {
+            background-color: var(--table-header);
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .tests-table tr:hover {
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+        
+        .test-result {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-value {
+            font-weight: 500;
+        }
+        
+        .normal-range {
+            color: var(--normal-range);
+        }
+        
+        .abnormal-range {
+            color: var(--abnormal-range);
+        }
+        
+        .test-range {
+            color: var(--light-text);
+            font-size: 0.9em;
+        }
+        
+        .edit-icon {
+            color: var(--primary-color);
+            cursor: pointer;
+            margin-right: 5px;
+        }
+        
+        @media (max-width: 768px) {
+            .patient-profile {
+                flex-direction: column;
+            }
+            
+            .patient-avatar {
+                width: 100%;
+                padding: 30px;
+            }
+            
+            .patient-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .info-row {
+                flex-direction: column;
+            }
+            
+            .info-label {
+                margin-bottom: 5px;
+            }
+            
+            .medication-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .medication-name {
+                margin-bottom: 5px;
+            }
+            
+            .tests-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <button class="back-btn" onclick="window.history.back()">
+                <i class="fas fa-arrow-left"></i> رجوع
+            </button>
+            <div class="clinic-info">
+                <div class="clinic-logo">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
+                <div class="clinic-text">
+                    <h1>عيادة السكري</h1>
+                </div>
+            </div>
+        </header>
+        
+        <div id="patientProfile" class="patient-profile">
+            <!-- سيتم تعبئة بيانات المريض هنا ديناميكياً -->
+        </div>
+        
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('general')">المعلومات العامة</button>
+            <button class="tab-btn" onclick="switchTab('diabetes')">معلومات السكري</button>
+            <button class="tab-btn" onclick="switchTab('medications')">الأدوية</button>
+            <button class="tab-btn" onclick="switchTab('tests')">الفحوصات</button>
+        </div>
+        
+        <!-- المحتوى العام -->
+        <div id="general" class="tab-content active">
+            <div class="info-card">
+                <h3><i class="fas fa-info-circle"></i> المعلومات الأساسية</h3>
+                <div id="basicInfo">
+                    <!-- سيتم تعبئة المعلومات الأساسية هنا -->
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3><i class="fas fa-notes-medical"></i> التاريخ المرضي</h3>
+                <div id="medicalHistory">
+                    <!-- سيتم تعبئة التاريخ المرضي هنا -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- معلومات السكري -->
+        <div id="diabetes" class="tab-content">
+            <div class="info-card">
+                <h3><i class="fas fa-file-medical"></i> معلومات السكري</h3>
+                <div id="diabetesInfo">
+                    <!-- سيتم تعبئة معلومات السكري هنا -->
+                </div>
+            </div>
+            
+            <div class="info-card">
+                <h3><i class="fas fa-procedures"></i> المضاعفات</h3>
+                <div id="complicationsInfo">
+                    <!-- سيتم تعبئة المضاعفات هنا -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- الأدوية -->
+        <div id="medications" class="tab-content">
+            <div class="info-card">
+                <h3><i class="fas fa-pills"></i> الأدوية الحالية</h3>
+                <div id="medicationsList" class="medications-list">
+                    <!-- سيتم تعبئة الأدوية هنا -->
+                </div>
+                <button class="add-med-btn" onclick="addNewMedication()">
+                    <i class="fas fa-plus"></i> إضافة دواء جديد
+                </button>
+            </div>
+        </div>
+        
+        <!-- الفحوصات -->
+        <div id="tests" class="tab-content">
+            <div class="info-card">
+                <h3><i class="fas fa-flask"></i> الفحوصات الطبية</h3>
+                <table class="tests-table">
+                    <thead>
+                        <tr>
+                            <th>اسم الفحص</th>
+                            <th>نتيجة المريض</th>
+                            <th>النسبة الطبيعية</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="testsTableBody">
+                        <!-- سيتم تعبئة الفحوصات هنا -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <button id="editBtn" class="btn btn-primary" onclick="toggleEditMode()">
+                <i class="fas fa-edit"></i> تعديل البيانات
+            </button>
+            <button id="saveBtn" class="btn btn-save" onclick="saveChanges()" style="display: none;">
+                <i class="fas fa-save"></i> حفظ التعديلات
+            </button>
+            <button class="btn btn-outline" onclick="window.print()">
+                <i class="fas fa-print"></i> طباعة السجل
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // حالة التعديل
+        let isEditMode = false;
+        let currentPatient = null;
+        let originalPatientData = null;
+        
+        // تبديل التبويبات
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`).classList.add('active');
+        }
+        
+        // تبديل وضع التعديل
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            
+            if (isEditMode) {
+                document.getElementById('editBtn').style.display = 'none';
+                document.getElementById('saveBtn').style.display = 'block';
+                enableEditing();
+            } else {
+                document.getElementById('editBtn').style.display = 'block';
+                document.getElementById('saveBtn').style.display = 'none';
+                disableEditing();
+                // إعادة تحميل البيانات الأصلية عند الإلغاء
+                loadPatientData();
+            }
+        }
+        
+        // تفعيل وضع التعديل
+        function enableEditing() {
+            // حفظ نسخة من البيانات الأصلية
+            originalPatientData = JSON.parse(JSON.stringify(currentPatient));
+            
+            // جعل جميع الحقول القابلة للتعديل
+            document.querySelectorAll('.editable-field').forEach(field => {
+                const fieldType = field.getAttribute('data-field-type');
+                const fieldName = field.getAttribute('data-field-name');
+                const currentValue = field.textContent.trim();
+                
+                if (fieldType === 'select') {
+                    const options = JSON.parse(field.getAttribute('data-options'));
+                    let selectHTML = `<select class="editable-select" data-field-name="${fieldName}">`;
+                    
+                    options.forEach(option => {
+                        selectHTML += `<option value="${option.value}" ${option.value === currentValue ? 'selected' : ''}>${option.text}</option>`;
+                    });
+                    
+                    selectHTML += '</select>';
+                    field.innerHTML = selectHTML;
+                } else if (fieldType === 'textarea') {
+                    field.innerHTML = `<textarea class="editable-textarea" data-field-name="${fieldName}">${currentValue}</textarea>`;
+                } else {
+                    field.innerHTML = `<input type="${fieldType === 'date' ? 'date' : 'text'}" class="editable-input" data-field-name="${fieldName}" value="${currentValue}">`;
+                }
+            });
+            
+            // جعل الأدوية قابلة للتعديل
+            document.querySelectorAll('.medication-item').forEach((item, index) => {
+                const name = item.querySelector('.medication-name').textContent;
+                const dose = item.querySelector('.medication-details span').textContent.replace('الجرعة: ', '');
+                
+                item.querySelector('.medication-name').innerHTML = `
+                    <input type="text" class="editable-input" value="${name}" data-med-index="${index}" data-med-field="name">
+                `;
+                
+                item.querySelector('.medication-details').innerHTML = `
+                    <span>الجرعة: <input type="text" class="editable-input" value="${dose}" data-med-index="${index}" data-med-field="dose"></span>
+                    <button class="remove-med-btn" onclick="removeMedication(${index})" style="background: none; border: none; color: var(--primary-color); margin-right: 10px;">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+            });
+        }
+        
+        // تعطيل وضع التعديل
+        function disableEditing() {
+            // استعادة النص من حقول الإدخال
+            document.querySelectorAll('.editable-input, .editable-select, .editable-textarea').forEach(input => {
+                const parent = input.parentElement;
+                parent.textContent = input.value;
+            });
+        }
+        
+        // حفظ التعديلات
+        function saveChanges() {
+            // تحديث بيانات المريض من واجهة المستخدم
+            updatePatientFromUI();
+            
+            // حفظ البيانات في localStorage
+            savePatientData();
+            
+            // الخروج من وضع التعديل
+            toggleEditMode();
+            
+            // إعادة تحميل البيانات لعرض التحديثات
+            loadPatientData();
+            
+            alert('تم حفظ التعديلات بنجاح!');
+        }
+        
+        // تحديث بيانات المريض من واجهة المستخدم
+        function updatePatientFromUI() {
+            if (!currentPatient) return;
+            
+            // تحديث الحقول القابلة للتعديل
+            document.querySelectorAll('.editable-input, .editable-select, .editable-textarea').forEach(input => {
+                const fieldName = input.getAttribute('data-field-name');
+                const value = input.value;
+                
+                if (fieldName) {
+                    // تحديث القيم في currentPatient
+                    if (fieldName.includes('.')) {
+                        // للحقول المتداخلة مثل diseases.0.name
+                        const parts = fieldName.split('.');
+                        let obj = currentPatient;
+                        
+                        for (let i = 0; i < parts.length - 1; i++) {
+                            if (!obj[parts[i]]) obj[parts[i]] = {};
+                            obj = obj[parts[i]];
+                        }
+                        
+                        obj[parts[parts.length - 1]] = value;
+                    } else {
+                        currentPatient[fieldName] = value;
+                    }
+                }
+            });
+            
+            // تحديث الأدوية
+            currentPatient.medications = [];
+            document.querySelectorAll('.medication-item').forEach(item => {
+                const name = item.querySelector('[data-med-field="name"]')?.value || '--';
+                const dose = item.querySelector('[data-med-field="dose"]')?.value || '--';
+                
+                currentPatient.medications.push({
+                    name,
+                    dose
+                });
+            });
+            
+            // تحديث تاريخ الزيارة الأخيرة
+            currentPatient.lastVisit = new Date().toLocaleDateString('ar-SA');
+        }
+        
+        // حفظ بيانات المريض في localStorage
+        function savePatientData() {
+            if (!currentPatient) return;
+            
+            // تحديث القائمة الرئيسية للمرضى
+            let patients = JSON.parse(localStorage.getItem('diabetesPatients')) || [];
+            const index = patients.findIndex(p => p.id === currentPatient.id);
+            
+            if (index !== -1) {
+                patients[index] = currentPatient;
+                localStorage.setItem('diabetesPatients', JSON.stringify(patients));
+            }
+        }
+        
+       // حذف دواء
+function removeMedication(index) {
+    if (confirm('هل أنت متأكد من حذف هذا الدواء؟')) {
+        // حفظ حالة التعديل الحالية
+        const isCurrentlyEditing = isEditMode;
+        
+        // حذف الدواء من مصفوفة الأدوية
+        currentPatient.medications.splice(index, 1);
+        
+        // حفظ البيانات فوراً
+        savePatientData();
+        
+        // إعادة تحميل بيانات المريض مع الحفاظ على حالة التعديل
+        loadPatientData();
+        
+        // إعادة تفعيل وضع التعديل إذا كنا في وضع التعديل
+        if (isCurrentlyEditing) {
+            toggleEditMode(); // إيقاف التعديل أولاً
+            toggleEditMode(); // إعادة التعديل
+        }
+    }
+}
+        
+        // تحميل بيانات المريض
+        function loadPatientData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const patientId = urlParams.get('id');
+            
+            if (!patientId) {
+                alert('لم يتم العثور على بيانات المريض');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            // جلب بيانات المريض من localStorage
+            const patients = JSON.parse(localStorage.getItem('diabetesPatients')) || [];
+            currentPatient = patients.find(p => p.id === patientId);
+            
+            if (!currentPatient) {
+                alert('لم يتم العثور على بيانات المريض');
+                window.location.href = 'dashboard.html';
+                return;
+            }
+            
+            // حساب العمر إذا لم يكن موجوداً
+            if (!currentPatient.age && currentPatient.birthDate) {
+                currentPatient.age = calculateAge(currentPatient.birthDate);
+            }
+            
+            // عرض بيانات المريض
+            displayPatientProfile(currentPatient);
+            displayBasicInfo(currentPatient);
+            displayMedicalHistory(currentPatient);
+            displayDiabetesInfo(currentPatient);
+            displayComplications(currentPatient);
+            displayMedications(currentPatient);
+            displayTests(currentPatient);
+        }
+        
+        // حساب العمر من تاريخ الميلاد
+        function calculateAge(birthDate) {
+            if (!birthDate) return '--';
+            
+            const today = new Date();
+            const birthDateObj = new Date(birthDate);
+            
+            if (isNaN(birthDateObj.getTime())) return '--';
+            
+            let age = today.getFullYear() - birthDateObj.getFullYear();
+            const monthDiff = today.getMonth() - birthDateObj.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDateObj.getDate())) {
+                age--;
+            }
+            
+            return age.toString();
+        }
+        
+        // عرض الملف الشخصي للمريض
+        function displayPatientProfile(patient) {
+            const patientProfile = document.getElementById('patientProfile');
+            
+            patientProfile.innerHTML = `
+                <div class="patient-avatar">
+                    <i class="fas fa-user-injured"></i>
+                </div>
+                <div class="patient-info">
+                    <h1 class="patient-name editable-field" data-field-type="text" data-field-name="fullName">${patient.fullName}</h1>
+                    <div class="patient-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-birthday-cake"></i>
+                            <span class="editable-field" data-field-type="date" data-field-name="birthDate">${patient.birthDate || '--'}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-venus-mars"></i>
+                            <span class="editable-field" data-field-type="select" data-field-name="gender" 
+                                  data-options='[{"value":"male","text":"ذكر"},{"value":"female","text":"أنثى"}]'>
+                                ${patient.gender === 'male' ? 'ذكر' : 'أنثى'}
+                            </span>
+                        </div>
+                       <div class="meta-item">
+                <i class="fas fa-weight"></i>
+                <span class="editable-field" data-field-type="number" data-field-name="weight">${patient.weight || '--'} كجم</span>
+            </div>
+                        <div class="meta-item">
+                            <i class="fas fa-phone"></i>
+                            <span class="editable-field" data-field-type="tel" data-field-name="phone">${patient.phone || '--'}</span>
+                        </div>
+                    </div>
+                    <span class="patient-hba1c">آخر تحليل HbA1c: <span class="editable-field" data-field-type="number" data-field-name="hba1c">${patient.hba1c || '--'}</span></span>
+                </div>
+            `;
+        }
+        
+        // عرض المعلومات الأساسية
+        function displayBasicInfo(patient) {
+            const basicInfo = document.getElementById('basicInfo');
+            
+            basicInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">تاريخ الميلاد:</span>
+                    <span class="info-value editable-field" data-field-type="date" data-field-name="birthDate">${patient.birthDate || '--'}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">زمرة الدم:</span>
+                    <span class="info-value editable-field" data-field-type="select" data-field-name="bloodType" 
+                          data-options='[{"value":"A+","text":"A+"},{"value":"A-","text":"A-"},{"value":"B+","text":"B+"},{"value":"B-","text":"B-"},{"value":"AB+","text":"AB+"},{"value":"AB-","text":"AB-"},{"value":"O+","text":"O+"},{"value":"O-","text":"O-"}]'>
+                        ${patient.bloodType || '--'}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">هاتف الطوارئ:</span>
+                    <span class="info-value editable-field" data-field-type="tel" data-field-name="emergencyPhone">${patient.emergencyPhone || '--'}</span>
+                </div>
+                <div class="info-row">
+            <span class="info-label">الوزن:</span>
+            <span class="info-value">
+                <span class="editable-field" data-field-type="number" data-field-name="weight">${patient.weight || '--'}</span> كجم
+            </span>
+        </div>
+            `;
+        }
+        
+        // عرض التاريخ المرضي
+        function displayMedicalHistory(patient) {
+            const medicalHistory = document.getElementById('medicalHistory');
+            
+            let diseasesHTML = '';
+            if (patient.diseases && patient.diseases.length > 0) {
+                diseasesHTML = patient.diseases.map((disease, index) => `
+                    <div class="info-row">
+                        <span class="info-label editable-field" data-field-type="text" data-field-name="diseases.${index}.name">${disease.name}</span>
+                        <span class="info-value editable-field" data-field-type="text" data-field-name="diseases.${index}.date">${disease.date || '--'}</span>
+                    </div>
+                `).join('');
+            } else {
+                diseasesHTML = '<p>لا توجد أمراض مسجلة</p>';
+            }
+            
+            medicalHistory.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">العمليات الجراحية:</span>
+                    <span class="info-value editable-field" data-field-type="textarea" data-field-name="previousSurgeries">${patient.previousSurgeries || 'لا توجد'}</span>
+                </div>
+                <h4 style="margin: 15px 0 10px; color: var(--primary-color);">الأمراض الحالية:</h4>
+                ${diseasesHTML}
+                <button class="add-med-btn" onclick="addDisease()" style="margin-top: 10px;">
+                    <i class="fas fa-plus"></i> إضافة مرض جديد
+                </button>
+                <h4 style="margin: 15px 0 10px; color: var(--primary-color);">التاريخ العائلي:</h4>
+                <p class="editable-field" data-field-type="textarea" data-field-name="medicalHistory">${patient.medicalHistory || 'لا توجد معلومات'}</p>
+            `;
+        }
+        
+       // إضافة مرض جديد
+function addDisease() {
+    if (!currentPatient.diseases) {
+        currentPatient.diseases = [];
+    }
+    
+    const diseaseName = prompt('أدخل اسم المرض الجديد:');
+    if (diseaseName) {
+        currentPatient.diseases.push({
+            name: diseaseName,
+            date: new Date().toLocaleDateString('ar-SA')
+        });
+        
+        // حفظ التغييرات في localStorage مباشرة
+        savePatientData();
+        
+        // إعادة تحميل البيانات لعرض التغييرات
+        loadPatientData();
+        
+        // إذا كنا في وضع التعديل، نعيد تفعيله
+        if (isEditMode) {
+            toggleEditMode(); // إيقاف التعديل أولاً
+            toggleEditMode(); // إعادة التعديل
+        }
+    }
+}
+        
+        // عرض معلومات السكري
+        function displayDiabetesInfo(patient) {
+            const diabetesInfo = document.getElementById('diabetesInfo');
+            
+            diabetesInfo.innerHTML = `
+                <div class="info-row">
+                    <span class="info-label">نوع السكري:</span>
+                    <span class="info-value editable-field" data-field-type="select" data-field-name="diabetesType" 
+                          data-options='[{"value":"type1","text":"النوع الأول"},{"value":"type2","text":"النوع الثاني"},{"value":"gestational","text":"سكري الحمل"},{"value":"other","text":"أخرى"}]'>
+                        ${patient.diabetesType === 'type1' ? 'النوع الأول' : 
+                          patient.diabetesType === 'type2' ? 'النوع الثاني' : 
+                          patient.diabetesType === 'gestational' ? 'سكري الحمل' : 
+                          patient.diabetesType === 'other' ? 'أخرى' : '--'}
+                    </span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">تاريخ التشخيص الأول:</span>
+                    <span class="info-value editable-field" data-field-type="date" data-field-name="firstDiagnosisDate">${patient.firstDiagnosisDate || '--'}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">تاريخ التشخيص الأخير:</span>
+                    <span class="info-value editable-field" data-field-type="date" data-field-name="lastDiagnosisDate">${patient.lastDiagnosisDate || '--'}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">آخر تحليل HbA1c:</span>
+                    <span class="info-value editable-field" data-field-type="number" data-field-name="hba1c">${patient.hba1c || '--'}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">تحليل السكري العشوائي (RBS):</span>
+                    <span class="info-value editable-field" data-field-type="number" data-field-name="rbs">${patient.rbs || '--'}</span>
+                </div>
+            `;
+        }
+        
+        // عرض المضاعفات
+        function displayComplications(patient) {
+            const complicationsInfo = document.getElementById('complicationsInfo');
+            
+            complicationsInfo.innerHTML = `
+                <p class="editable-field" data-field-type="textarea" data-field-name="complications">${patient.complications || 'لا توجد مضاعفات مسجلة'}</p>
+            `;
+        }
+        
+        // عرض الأدوية
+        function displayMedications(patient) {
+            const medicationsList = document.getElementById('medicationsList');
+            
+            if (patient.medications && patient.medications.length > 0) {
+                medicationsList.innerHTML = patient.medications.map(med => `
+                    <div class="medication-item">
+                        <div class="medication-name">${med.name}</div>
+                        <div class="medication-details">
+                            <span>الجرعة: ${med.dose || '--'}</span>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                medicationsList.innerHTML = '<p>لا توجد أدوية مسجلة</p>';
+            }
+        }
+        
+        // عرض الفحوصات في جدول
+        function displayTests(patient) {
+            const testsTableBody = document.getElementById('testsTableBody');
+            
+            // دالة مساعدة لتحديد ما إذا كانت النتيجة ضمن النطاق الطبيعي
+            function isNormal(value, range) {
+                if (!value) return false;
+                
+                if (range.includes('-')) {
+                    const [min, max] = range.split('-').map(Number);
+                    const numValue = Number(value);
+                    return numValue >= min && numValue <= max;
+                } else if (range.startsWith('<')) {
+                    const max = Number(range.substring(1));
+                    const numValue = Number(value);
+                    return numValue < max;
+                } else if (range.startsWith('>')) {
+                    const min = Number(range.substring(1));
+                    const numValue = Number(value);
+                    return numValue > min;
+                } else if (range.includes('/')) {
+                    // لضغط الدم
+                    const [sys, dia] = value.split('/').map(Number);
+                    const [normalSys, normalDia] = range.split('/').map(Number);
+                    return sys <= normalSys && dia <= normalDia;
+                }
+                
+                return false;
+            }
+            
+            // دالة مساعدة لعرض نتيجة الفحص مع أيقونة التعديل
+            function renderTestValue(value, fieldName, type = 'text') {
+                return `
+                    <div class="test-result">
+                        <span class="editable-field" data-field-type="${type}" data-field-name="${fieldName}">
+                            ${value || '--'}
+                        </span>
+                    </div>
+                `;
+            }
+            
+            testsTableBody.innerHTML = `
+                <tr>
+                    <td>فحص السكري الصائم (FBS)</td>
+                    <td>${renderTestValue(patient.fbs, 'fbs', 'number')}</td>
+                    <td>70-105 mg/dl</td>
+                    <td>
+                        <span class="test-value ${isNormal(patient.fbs, '70-105') ? 'normal-range' : 'abnormal-range'}">
+                            ${isNormal(patient.fbs, '70-105') ? 'طبيعي' : 'غير طبيعي'}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>خلايا الدم البيضاء (W.B.C)</td>
+                    <td>${renderTestValue(patient.wbc, 'wbc', 'number')}</td>
+                    <td>4-10</td>
+                    <td>
+                        <span class="test-value ${isNormal(patient.wbc, '4-10') ? 'normal-range' : 'abnormal-range'}">
+                            ${isNormal(patient.wbc, '4-10') ? 'طبيعي' : 'غير طبيعي'}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>خلايا الدم الحمراء (R.B.C)</td>
+                    <td>${renderTestValue(patient.rbc, 'rbc', 'number')}</td>
+                    <td>4.5-5.5</td>
+                    <td>
+                        <span class="test-value ${isNormal(patient.rbc, '4.5-5.5') ? 'normal-range' : 'abnormal-range'}">
+                            ${isNormal(patient.rbc, '4.5-5.5') ? 'طبيعي' : 'غير طبيعي'}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>الهيموغلوبين (H.G.B)</td>
+                    <td>${renderTestValue(patient.hgb, 'hgb', 'number')}</td>
+                    <td>13-17 g/dl</td>
+                    <td>
+                        <span class="test-value ${isNormal(patient.hgb, '13-17') ? 'normal-range' : 'abnormal-range'}">
+                            ${isNormal(patient.hgb, '13-17') ? 'طبيعي' : 'غير طبيعي'}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>الكوليسترول الضار (LDL)</td>
+                    <td>${renderTestValue(patient.ldl, 'ldl', 'number')}</td>
+                    <td>&lt;130 mg/dl</td>
+                    <td>
+                        <span class="test-value ${isNormal(patient.ldl, '<130') ? 'normal-range' : 'abnormal-range'}">
+                            ${isNormal(patient.ldl, '<130') ? 'طبيعي' : 'غير طبيعي'}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>الكوليسترول الجيد (HDL)</td>
+                    <td>${renderTestValue(patient.hdl, 'hdl', 'number')}</td>
+                    <td>&gt;60 mg/dl</td>
+                    <td>
+                        <span class="test-value ${isNormal(patient.hdl, '>60') ? 'normal-range' : 'abnormal-range'}">
+                            ${isNormal(patient.hdl, '>60') ? 'طبيعي' : 'غير طبيعي'}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>الدهون الثلاثية (TG)</td>
+                    <td>${renderTestValue(patient.tg, 'tg', 'number')}</td>
+                    <td>40-150 mg/dl</td>
+                    <td>
+                        <span class="test-value ${isNormal(patient.tg, '40-150') ? 'normal-range' : 'abnormal-range'}">
+                            ${isNormal(patient.tg, '40-150') ? 'طبيعي' : 'غير طبيعي'}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>ضغط الدم (B.P)</td>
+                    <td>${renderTestValue(patient.bp, 'bp')}</td>
+                    <td>120/80 mm/Hg</td>
+                    <td>
+                        <span class="test-value ${isNormal(patient.bp, '120/80') ? 'normal-range' : 'abnormal-range'}">
+                            ${isNormal(patient.bp, '120/80') ? 'طبيعي' : 'غير طبيعي'}
+                        </span>
+                    </td>
+                </tr>
+            `;
+        }
+        
+        // إضافة دواء جديد
+        function addNewMedication() {
+            const patientId = new URLSearchParams(window.location.search).get('id');
+            window.location.href = `add-medication.html?patientId=${patientId}`;
+        }
+        
+        // تحميل بيانات المريض عند فتح الصفحة
+        document.addEventListener('DOMContentLoaded', loadPatientData);
+    </script>
+</body>
+</html>
