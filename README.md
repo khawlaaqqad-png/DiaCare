@@ -19,8 +19,6 @@ The system aims to:
 
 ## 🖼️ Screenshots
 
-## 🖼️ Screenshots
-
 | Page | Screenshot |
 |------|------------|
 | Login | ![Login](screenshots/login.png) |
@@ -28,6 +26,9 @@ The system aims to:
 | Patient Details | ![Patient Details](screenshots/patient-details.png) |
 | Medical Tests | ![Medical Tests](screenshots/medical-tests.png) |
 | Medications | ![Medications](screenshots/medications.png) |
+| Add Medication | ![Add Medication](screenshots/add-medication.png) |
+| Smart Suggestions | ![Smart Suggestions](screenshots/smart-suggestions.png) |
+| Medical Info | ![Medical Info](screenshots/medical-info.png) |
 
 ## 🚀 Key Features
 
