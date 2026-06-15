@@ -23,8 +23,8 @@ The system aims to:
 |------|------------|
 | Login | ![Login](screenshots/login.png) |
 | Dashboard | ![Dashboard](screenshots/dashboard.png) |
-| Patient Details | ![Patient Details](screenshots/patient-details.png) |
 | Medical Info | ![Medical Info](screenshots/medical-info.png) |
+| Patient Details | ![Patient Details](screenshots/patient-details.png) |
 | Medical Tests | ![Medical Tests](screenshots/medical-tests.png) |
 | Medications | ![Medications](screenshots/medications.png) |
 | Add Medication | ![Add Medication](screenshots/add-medication.png) |
