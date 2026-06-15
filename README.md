@@ -21,7 +21,7 @@ The system aims to:
 
 | Page | Description |
 |------|-------------|
-| ![Login](Screenshot%20(178).png) | Login and account creation interface |
+| ![Login]<img width="500" height="400" alt="Screenshot (178)" src="https://github.com/user-attachments/assets/47eb93ee-8ae0-4b5c-948f-38f608391fca" />| Login and account creation interface |
 | ![Dashboard](Screenshot%20(179).png) | Patient list with HbA1c indicator |
 | ![Patient Details](Screenshot%20(180).png) | Patient details and basic information |
 | ![Medical Tests](Screenshot%20(181).png) | Tests table with status (normal/abnormal) |
